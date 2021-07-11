@@ -34,14 +34,12 @@ bool Update(float dt)
 	psPosition.y = static_cast<float>(y);
 
 	timer += dt * 5;
-	/*
 	if (Core::Input::IsPressed(Core::Input::BUTTON_LEFT))
 	{
-	std::vector<Engine::Color> colors  {Engine::Color::white, Engine::Color::orange}
-	engine.Get<Engine::ParticleSystem>()->Create(psPosition, 150, 2, colors[nc::RandomRangeInt(0, colors.size())], 150);
+		std::vector<Engine::Color> colors{ Engine::Color::white, Engine::Color::orange };
+		engine.Get<Engine::ParticleSystem>()->Create(psPosition, 150, 2, colors[Engine::RandomRangeInt(0, colors.size())], 150);
 
 	}
-	*/
 	
 	float thrust = 0;
 	if (Core::Input::IsPressed('A')) transform.rotation -= 5 * dt;
@@ -52,7 +50,7 @@ bool Update(float dt)
 	transform.position.x = Engine::Wrap(transform.position.x, 0.0f, 800.0f);
 	transform.position.y = Engine::Wrap(transform.position.y, 0.0f, 600.0f);
 	
-	//engine.Get<Engine::ParticleSystem>()->Create(transform.position, 3, 2, Engine::Color::white, 50);
+	engine.Get<Engine::ParticleSystem>()->Create(transform.position, 3, 2, Engine::Color::white, 50);
 	engine.Update(dt);
 
 	return quit;
@@ -62,7 +60,7 @@ void Draw(Core::Graphics& graphics)
 {
 	float scale = 1 + (std::sin(timer) + 1) * 2;
 	shape.Draw(graphics, transform.position, transform.rotation + Engine::DegToRad(180), 3);
-	//engine.Get<Engine::ParticleSystem>()->Draw(graphics);
+	engine.Get<Engine::ParticleSystem>()->Draw(graphics);
 	
 	Engine::Color color = Engine::Lerp(Engine::Color::yellow, Engine::Color::purple, psPosition.x / 800);
 	graphics.SetColor(color);
