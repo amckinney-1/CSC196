@@ -38,7 +38,7 @@ bool Update(float dt)
 	{
 		std::vector<Engine::Color> colors{ Engine::Color::white, Engine::Color::orange };
 		engine.Get<Engine::ParticleSystem>()->Create(psPosition, 150, 2, colors[Engine::RandomRangeInt(0, colors.size())], 150);
-
+		engine.Get<Engine::AudioSystem>()->PlayAudio("explosion");
 	}
 	
 	float thrust = 0;
@@ -81,6 +81,7 @@ int main()
 	Core::RegisterDrawFn(Draw);
 
 	engine.Startup();
+	engine.Get<Engine::AudioSystem>()->AddAudio("explosion", "explosion.wav");
 
 	Core::GameLoop();
 	Core::Shutdown();
