@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include <iostream>
 
 namespace Engine
 {
@@ -51,6 +52,8 @@ namespace Engine
 
 		static float Distance(const Vector2& v1, const Vector2& v2);
 		static Vector2 Rotate(const Vector2& v, float radians);
+
+		friend std::istream& operator >> (std::istream& stream, Vector2& v);
 
 		static const Vector2 up;
 		static const Vector2 down;

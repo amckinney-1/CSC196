@@ -1,4 +1,5 @@
 #include "Shape.h"
+#include <fstream>
 
 namespace Engine 
 {
@@ -28,5 +29,36 @@ namespace Engine
 			graphics.DrawLine(p1.x, p1.y, p2.x, p2.y);
 
 		}
+	}
+
+	bool Shape::Load(const std::string& filename)
+	{
+		bool success = false;
+
+		std::ifstream stream(filename);
+		if (stream.is_open())
+		{
+			success = true;
+
+			color = Color::purple;
+			//read number of points
+			std::string line;
+			std::getline(stream, line);
+			size_t size = std::stoi(line);
+
+			for (size_t i = 0; i < size; i++)
+			{
+				Engine::Vector2 point;
+				stream >> point;
+
+				points.push_back(point);
+			}
+
+			Engine::Vector2 point;
+			stream >> point;
+
+		}
+
+		return success;
 	}
 }
