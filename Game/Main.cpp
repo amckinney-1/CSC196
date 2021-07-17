@@ -38,12 +38,12 @@ bool Update(float dt)
 	{
 		std::vector<Engine::Color> colors{ Engine::Color::white, Engine::Color::orange };
 		engine.Get<Engine::ParticleSystem>()->Create(psPosition, 150, 2, colors[Engine::RandomRangeInt(0, colors.size())], 150);
+
 		engine.Get<Engine::AudioSystem>()->PlayAudio("explosion");
 	}
-	//engine.Get<Engine::ParticleSystem>()->Create(transform.position, 3, 2, Engine::Color::white, 50);
 	
-	scene.GetActor<Player>()->shape->color = Engine::Color{ Engine::Random(), Engine::Random(), Engine::Random() };
-	scene.GetActor<Enemy>()->shape->color = Engine::Color{ Engine::Random(), Engine::Random(), Engine::Random() };
+	//scene.GetActor<Player>()->shape->color = Engine::Color{ Engine::Random(), Engine::Random(), Engine::Random() };
+	//scene.GetActor<Enemy>()->shape->color = Engine::Color{ Engine::Random(), Engine::Random(), Engine::Random() };
 
 	engine.Update(dt);
 	scene.Update(dt);
@@ -69,10 +69,12 @@ void Draw(Core::Graphics& graphics)
 
 void Init()
 {
+	scene.engine = &engine;
+
 	std::shared_ptr<Engine::Shape> shape = std::make_shared<Engine::Shape>();
 	shape->Load("shape.txt");
 
-	std::shared_ptr<Engine::Shape> shape1 = std::make_shared<Engine::Shape>( points, Engine::Color{1, 1, 1} );
+	//std::shared_ptr<Engine::Shape> shape1 = std::make_shared<Engine::Shape>( points, Engine::Color{1, 1, 1} );
 	std::shared_ptr<Engine::Shape> shape2 = std::make_shared<Engine::Shape>( points, Engine::Color{0, 1, 1} );
 
 	engine.Get<Engine::AudioSystem>()->AddAudio("explosion", "explosion.wav");

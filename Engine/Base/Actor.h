@@ -14,8 +14,10 @@ namespace Engine
 	public:
 		Actor(const Transform& transform, std::shared_ptr<Shape> shape) : transform{ transform }, shape{ shape } {};
 
-		virtual void Update(float dt);
+		virtual void Update(float dt) {}
 		virtual void Draw(Core::Graphics& graphics);
+
+		virtual void OnCollision(Actor* actor) {}
 
 	public:
 		bool destroy{ false };

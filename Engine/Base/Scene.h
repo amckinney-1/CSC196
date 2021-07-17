@@ -8,6 +8,8 @@
 namespace Engine
 {
 	class Actor;
+	class Engine;
+
 
 	class Scene : public Object
 	{
@@ -26,7 +28,11 @@ namespace Engine
 		std::vector<T*> GetActors();
 
 	public:
-		std::list<std::unique_ptr<Actor>> actors;
+		Engine* engine{ nullptr };
+
+	private:
+		std::vector<std::unique_ptr<Actor>> actors;
+		std::vector<std::unique_ptr<Actor>> newActors;
 	};
 
 	template<typename T>

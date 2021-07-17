@@ -1,5 +1,6 @@
 #include "Enemy.h"
-#include "Math/MathUtils.h"
+#include "Projectile.h"
+#include "Engine.h"
 
 void Enemy::Update(float dt)
 {
@@ -9,4 +10,16 @@ void Enemy::Update(float dt)
 	transform.position.x = Engine::Wrap(transform.position.x, 0.0f, 800.0f);
 	transform.position.y = Engine::Wrap(transform.position.y, 0.0f, 600.0f);
 
+}
+
+void Enemy::OnCollision(Actor* actor)
+{
+	if (dynamic_cast<Projectile*>(actor))
+	{
+		actor->destroy = true;
+
+		destroy = true;
+		scene->engine->Get<Engine::ParticleSystem>()->Create(transform.position, 200, 1, Engine::Color::white, 100);
+		scene->engine->Get<Engine::AudioSystem>()->PlayAudio("explosion");
+	}
 }

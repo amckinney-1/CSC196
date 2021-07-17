@@ -1,5 +1,6 @@
 #pragma once
 #include "core.h"
+#include <iostream>
 
 namespace Engine
 {
@@ -31,6 +32,8 @@ namespace Engine
 
 			return (red | green << 8 | blue << 16);
 		}
+
+		friend std::istream& operator >> (std::istream& stream, Color& c);
 
 		static const Color white;
 		static const Color red;

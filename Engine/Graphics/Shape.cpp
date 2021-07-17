@@ -40,7 +40,8 @@ namespace Engine
 		{
 			success = true;
 
-			color = Color::purple;
+			stream >> color;
+			
 			//read number of points
 			std::string line;
 			std::getline(stream, line);
@@ -56,7 +57,6 @@ namespace Engine
 
 			Engine::Vector2 point;
 			stream >> point;
-
 		}
 
 		return success;
