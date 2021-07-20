@@ -25,6 +25,5 @@ namespace Engine
 		Transform transform;
 		std::shared_ptr<Shape> shape;
 		Scene* scene{ nullptr };
-
 	};
 }

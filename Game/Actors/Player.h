@@ -8,8 +8,9 @@ public:
 
 	void Update(float dt) override;
 	//void Draw(Core::Graphics& graphics) override;
+
 private:
 	float fireTimer{ 0 };
-	float fireRate{ 0.01f };
+	float fireRate{ 0.2f };
 	float speed{ 300 };
 };
