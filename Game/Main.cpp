@@ -34,12 +34,6 @@ int dec(int i) { return --i; }
 
 int main()
 {
-	int (*operation)(int);
-	operation = &dec;
-
-	std::cout << operation(5) << std::endl;
-	system("pause");
-
 	char name[] = "THIS IS A WINDOW";
 	Core::Init(name, 800, 600, 120);
 	Core::RegisterUpdateFn(Update);

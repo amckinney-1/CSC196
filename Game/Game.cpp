@@ -12,7 +12,7 @@ void Game::Initialize()
 	scene->engine = engine.get();
 
 	engine->Get<Engine::AudioSystem>()->AddAudio("explosion", "explosion.wav");
-	stateFunction = &Game::UpdateTitle;
+	//stateFunction = &Game::UpdateTitle;
 }
 
 void Game::Shutdown()
@@ -25,7 +25,7 @@ void Game::Update(float dt)
 {
 	stateTimer += dt;
 
-	(this->*stateFunction(dt));
+	//(this->*stateFunction(dt));
 
 	switch (state)
 	{
@@ -109,7 +109,7 @@ void Game::UpdateTitle(float dt)
 {
 	if (Core::Input::IsPressed(VK_SPACE))
 	{
-		stateFunction = &Game::UpdateTitle;
+		//stateFunction = &Game::UpdateTitle;
 		//state = eState::StartGame;
 	}
 }
