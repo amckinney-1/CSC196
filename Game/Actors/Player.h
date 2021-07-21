@@ -7,10 +7,10 @@ public:
 	Player(const Engine::Transform& transform, std::shared_ptr<Engine::Shape> shape, float speed) : Engine::Actor{ transform, shape }, speed{ speed } {};
 
 	void Update(float dt) override;
-	//void Draw(Core::Graphics& graphics) override;
+	void OnCollision(Actor* actor) override;
 
 private:
 	float fireTimer{ 0 };
-	float fireRate{ 0.2f };
+	float fireRate{ 0.1f };
 	float speed{ 300 };
 };

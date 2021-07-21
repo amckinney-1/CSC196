@@ -24,6 +24,9 @@ private:
 	void UpdateTitle(float dt);
 	void UpdateLevelStart(float dt);
 
+	void OnAddPoints(const Engine::Event& event);
+	void OnPlayerDead(const Engine::Event& event);
+
 public:
 	std::unique_ptr<Engine::Engine> engine;
 	std::unique_ptr<Engine::Scene> scene;

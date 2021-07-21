@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "Actor.h"
+#include <algorithm>
 
 namespace Engine
 {
@@ -11,20 +12,20 @@ namespace Engine
 		newActors.clear();
 
 		// update actors
-		for (auto& actor : actors)
-		{
-			actor->Update(dt);
-		}
+		std::for_each(actors.begin(), actors.end(), [dt](auto& actor) { actor->Update(dt); });
 
 		// check collisions
 		for (size_t i = 0; i < actors.size(); i++)
 		{
 			for (size_t j = i + 1; j < actors.size(); j++)
 			{
+				if (actors[i]->destroy || actors[j]->destroy) continue;
 				Vector2 dir = actors[i]->transform.position - actors[j]->transform.position;
 				float distance = dir.Length();
 				if (distance < 10)
 				{
+
+
 					actors[i]->OnCollision(actors[j].get());
 					actors[j]->OnCollision(actors[i].get());
 				}
@@ -50,10 +51,7 @@ namespace Engine
 
 	void Scene::Draw(Core::Graphics& graphics)
 	{
-		for (auto& actor : actors)
-		{
-			actor->Draw(graphics);
-		}
+		std::for_each(actors.begin(), actors.end(), [graphics](auto& actor) mutable { actor->Draw(graphics); });
 	}
 
 	void Scene::AddActor(std::unique_ptr<Actor> actor)
