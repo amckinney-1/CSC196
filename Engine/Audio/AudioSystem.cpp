@@ -1,7 +1,5 @@
 #include "AudioSystem.h"
 
-Engine::AudioSystem audioSystem;
-
 namespace Engine
 {
 	void AudioSystem::Startup()

@@ -6,7 +6,7 @@
 
 namespace Engine
 {
-	class ParticleSystem : public System
+	class ParticleSystem : public GraphicsSystem
 	{
 	private:
 		struct Particle
@@ -28,9 +28,10 @@ namespace Engine
 		void Shutdown() override;
 
 		void Update(float);
-		void Draw(Core::Graphics& graphics);
+		void Draw(Core::Graphics& graphics) override;
 
 		void Create(const Vector2& position, size_t count, float lifetime, const Color& color, float speed);
+		void Create(const Vector2& position, size_t count, float lifetime, const std::vector<Color>& colors, float speed, float angle, float angleRange);
 	
 	private:
 		std::vector<Particle> particles;

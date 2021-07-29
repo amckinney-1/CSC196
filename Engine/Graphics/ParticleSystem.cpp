@@ -56,4 +56,22 @@ namespace Engine
 			}
 		}
 	}
+
+	void ParticleSystem::Create(const Vector2& position, size_t count, float lifetime, const std::vector<Color>& colors, float speed, float angle, float angleRange)
+	{
+		for (size_t i = 0; i < count; i++)
+		{
+			auto particle = std::find_if(particles.begin(), particles.end(), Particle::isNotActive);
+			if (particle != particles.end())
+			{
+				particle->isActive = true;
+				particle->lifetime = lifetime;
+				particle->position = position;
+				particle->prevPosition = position;
+				particle->color = colors[rand() % colors.size()];
+
+				particle->velocity = Engine::Vector2::Rotate(Engine::Vector2::right, angle + Engine::RandomRange(-angleRange, angleRange)) * (speed * Engine::Random());
+			}
+		}
+	}
 }

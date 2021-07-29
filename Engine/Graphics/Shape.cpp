@@ -23,11 +23,10 @@ namespace Engine
 
 		for (size_t i = 0; i < points.size() - 1; i++)
 		{
-			Engine::Vector2 p1 = transform.position + (Vector2::Rotate(points[i], transform.rotation) * transform.scale);
-			Engine::Vector2 p2 = transform.position + (Vector2::Rotate(points[i + 1], transform.rotation) * transform.scale);
+			Engine::Vector2 p1 = transform.matrix * points[i];
+			Engine::Vector2 p2 = transform.matrix * points[i + 1];
 
 			graphics.DrawLine(p1.x, p1.y, p2.x, p2.y);
-
 		}
 	}
 
@@ -55,10 +54,17 @@ namespace Engine
 				points.push_back(point);
 			}
 
-			Engine::Vector2 point;
-			stream >> point;
+			ComputeRadius();
 		}
 
 		return success;
+	}
+
+	void Shape::ComputeRadius()
+	{
+		for (auto& point : points)
+		{
+			radius = std::max(radius, point.Length());
+		}
 	}
 }

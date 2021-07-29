@@ -22,5 +22,3 @@ namespace Engine
 		std::map<std::string, FMOD::Sound*> sounds;
 	};
 }
-
-extern Engine::AudioSystem audiosystem;

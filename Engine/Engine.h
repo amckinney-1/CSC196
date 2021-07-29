@@ -16,11 +16,13 @@
 
 // framework
 #include "Framework/EventSystem.h"
+#include "Framework/ResourceSystem.h"
 
 // objects
 #include "Base/Actor.h"
 #include "Base/Scene.h"
 
+#define NOMINMAX
 #include "core.h"
 #include <vector>
 #include <memory>
@@ -35,6 +37,7 @@ namespace Engine
 		void Shutdown();
 
 		void Update(float dt);
+		void Draw(Core::Graphics& graphics);
 
 		template<typename T>
 		T* Get();

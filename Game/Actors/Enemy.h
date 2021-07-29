@@ -11,5 +11,7 @@ public:
 
 	//void Draw(Core::Graphics& graphics) override;
 private:
-	float speed{ 300 };
+	float speed{ 200 };
+	float fireTimer{ 0 };
+	float fireRate{ 1 };
 };

@@ -4,12 +4,14 @@
 #include <functional>
 #include <map>
 #include <list>
+#include <variant>
 
 namespace Engine
 {
 	struct Event
 	{
 		std::string name;
+		std::variant<int, bool, float, std::string> data;
 	};
 
 	class EventSystem : public System

@@ -12,6 +12,10 @@ void Game::Initialize()
 	scene->engine = engine.get();
 
 	engine->Get<Engine::AudioSystem>()->AddAudio("explosion", "explosion.wav");
+	engine->Get<Engine::AudioSystem>()->AddAudio("PlayerShoot", "PlayerShoot.wav");
+	engine->Get<Engine::AudioSystem>()->AddAudio("EnemyShoot", "EnemyShoot.wav");
+	engine->Get<Engine::AudioSystem>()->AddAudio("PlayerExplosion", "PlayerExplosion.wav");
+	engine->Get<Engine::AudioSystem>()->AddAudio("EnemyExplosion", "EnemyExplosion.wav");
 	
 	engine->Get<Engine::EventSystem>()->Subscribe("AddPoints", std::bind(&Game::OnAddPoints, this, std::placeholders::_1));
 	engine->Get<Engine::EventSystem>()->Subscribe("PlayerDead", std::bind(&Game::OnPlayerDead, this, std::placeholders::_1));
@@ -43,26 +47,8 @@ void Game::Update(float dt)
 		state = eState::StartLevel;
 		break;
 	case Game::eState::StartLevel:
-	{
-		std::vector<Engine::Vector2> points = { {-5, -5}, {5, -5}, {0, 10}, {-5, -5} };
-
-		std::shared_ptr<Engine::Shape> shape = std::make_shared<Engine::Shape>();
-		shape->Load("shape.txt");
-
-		//std::shared_ptr<Engine::Shape> shape1 = std::make_shared<Engine::Shape>( points, Engine::Color{1, 1, 1} );
-		std::shared_ptr<Engine::Shape> shape2 = std::make_shared<Engine::Shape>(points, Engine::Color{ 0, 1, 1 });
-
-
-		scene->AddActor(std::make_unique<Player>(Engine::Transform{ Engine::Vector2{400, 300}, 0, 3 }, shape, 300.0f));
-
-		for (size_t i = 0; i < 100; i++)
-		{
-			scene->AddActor(std::make_unique<Enemy>(Engine::Transform{ Engine::Vector2{Engine::RandomRange(0.0f, 800),Engine::RandomRange(0.0f, 600)}, Engine::RandomRange(0, Engine::TwoPi), 2 }, shape2, 300.0f));
-		}
-
+		UpdateLevelStart(dt);
 		state = eState::Game;
-
-	}
 		break;
 	case Game::eState::Game:
 		break;
@@ -81,8 +67,6 @@ void Game::Draw(Core::Graphics& graphics)
 	switch (state)
 	{
 	case Game::eState::Title:
-		
-		//graphics.SetBackgroundColor(Engine::Color::cyan);
 		graphics.SetColor(Engine::Color::purple);
 
 		graphics.DrawString(320, 300 + static_cast<int>(std::sin(stateTimer * 10) * 20), "[Insert Game Title Here]");
@@ -94,6 +78,10 @@ void Game::Draw(Core::Graphics& graphics)
 	case Game::eState::StartLevel:
 		break;
 	case Game::eState::Game:
+		if (scene->GetActors<Enemy>().size() == 0)
+		{
+			state = eState::GameOver;
+		}
 		break;
 	case Game::eState::GameOver:
 		graphics.SetColor(Engine::Color::red);
@@ -106,7 +94,7 @@ void Game::Draw(Core::Graphics& graphics)
 	graphics.DrawString(30, 20, std::to_string(score).c_str());
 	graphics.DrawString(770, 20, std::to_string(lives).c_str());
 	scene->Draw(graphics);
-	engine->Get<Engine::ParticleSystem>()->Draw(graphics);
+	engine->Draw(graphics);
 }
 
 void Game::UpdateTitle(float dt)
@@ -120,29 +108,21 @@ void Game::UpdateTitle(float dt)
 
 void Game::UpdateLevelStart(float dt)
 {
-	std::vector<Engine::Vector2> points = { {-5, -5}, {5, -5}, {0, 10}, {-5, -5} };
-
-	std::shared_ptr<Engine::Shape> shape = std::make_shared<Engine::Shape>();
-	shape->Load("shape.txt");
-
-	//std::shared_ptr<Engine::Shape> shape1 = std::make_shared<Engine::Shape>( points, Engine::Color{1, 1, 1} );
-	std::shared_ptr<Engine::Shape> shape2 = std::make_shared<Engine::Shape>(points, Engine::Color{ 0, 1, 1 });
-
-	scene->AddActor(std::make_unique<Player>(Engine::Transform{ Engine::Vector2{400, 300}, 0, 3 }, shape, 300.0f));
-
-	for (size_t i = 0; i < 100; i++)
+	scene->AddActor(std::make_unique<Player>(Engine::Transform{ Engine::Vector2{400, 300}, 0, 3 }, engine->Get<Engine::ResourceSystem>()->Get<Engine::Shape>("shape.txt"), 300.0f));
+	for (size_t i = 0; i < 2; i++)
 	{
-			scene->AddActor(std::make_unique<Enemy>(Engine::Transform{ Engine::Vector2{Engine::RandomRange(0.0f, 800),Engine::RandomRange(0.0f, 600)}, Engine::RandomRange(0, Engine::TwoPi), 2 }, shape2, 300.0f));
+			scene->AddActor(std::make_unique<Enemy>(Engine::Transform{ Engine::Vector2{Engine::RandomRange(0.0f, 800),Engine::RandomRange(0.0f, 600)}, Engine::RandomRange(0, Engine::TwoPi), 2 }, engine->Get<Engine::ResourceSystem>()->Get<Engine::Shape>("shape.txt"), 300.0f));
 	}
 }
 
 void Game::OnAddPoints(const Engine::Event& event)
 {
-	score += 100;
+	score += std::get<int>(event.data);
 }
 
 void Game::OnPlayerDead(const Engine::Event& event)
 {
 	lives--;
+	std::cout << std::get<std::string>(event.data) << std::endl;
 	state = eState::GameOver;
 }

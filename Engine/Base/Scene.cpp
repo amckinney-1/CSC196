@@ -22,7 +22,7 @@ namespace Engine
 				if (actors[i]->destroy || actors[j]->destroy) continue;
 				Vector2 dir = actors[i]->transform.position - actors[j]->transform.position;
 				float distance = dir.Length();
-				if (distance < 10)
+				if (distance < actors[i]->GetRadius() + actors[j]->GetRadius())
 				{
 
 
@@ -57,6 +57,7 @@ namespace Engine
 	void Scene::AddActor(std::unique_ptr<Actor> actor)
 	{
 		actor->scene = this;
+		actor->Initialize();
 
 		Scene::newActors.push_back(std::move(actor));
 	}
