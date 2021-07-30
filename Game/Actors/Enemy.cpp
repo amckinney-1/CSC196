@@ -63,7 +63,7 @@ void Enemy::Update(float dt)
 
 void Enemy::OnCollision(Actor* actor)
 {
-	if (dynamic_cast<Player*>(actor) || (dynamic_cast<Projectile*>(actor) && actor->tag == "Player"))
+	if (/*dynamic_cast<Player*>(actor) || */(dynamic_cast<Projectile*>(actor) && actor->tag == "Player"))
 	{
 		actor->destroy = true;
 

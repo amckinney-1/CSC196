@@ -55,7 +55,7 @@ void Game::Update(float dt)
 		break;
 	case Game::eState::Game:
 		levelTimer += dt;
-		if (levelTimer >= 15)
+		if (levelTimer >= 5)
 		{
 			levelTimer -= 5;
 			int spawnNumber = Engine::RandomRangeInt(1 + level, 3 + level);
