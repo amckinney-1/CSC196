@@ -21,7 +21,6 @@ public:
 	void Draw(Core::Graphics& graphics);
 
 private:
-	void UpdateTitle(float dt);
 	void UpdateLevelStart(float dt);
 
 	void OnAddPoints(const Engine::Event& event);
@@ -34,10 +33,10 @@ public:
 private:
 	eState state{ eState::Title };
 	float stateTimer{ 0.0f };
-
-	//void (Game::* stateFunction)(float) = nullptr;
+	float levelTimer{ 0.0f };
 
 	size_t score{ 0 };
 	size_t lives{ 0 };
+	size_t level{ 0 };
 
 };

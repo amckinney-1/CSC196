@@ -2,6 +2,7 @@
 #include "Math/MathUtils.h"
 #include "Projectile.h"
 #include "Enemy.h"
+#include "Asteroid.h"
 #include "Engine.h"
 
 Player::Player(const Engine::Transform& transform, std::shared_ptr<Engine::Shape> shape, float speed) : Engine::Actor{ transform, shape }, speed{ speed } 
@@ -12,16 +13,16 @@ Player::Player(const Engine::Transform& transform, std::shared_ptr<Engine::Shape
 void Player::Initialize()
 {
 	std::unique_ptr locator = std::make_unique<Actor>();
-	locator->transform.localPosition = Engine::Vector2{ 0, 5 };
+	locator->transform.localPosition = Engine::Vector2{ 2, 3 };
 	AddChild(std::move(locator));
 
 	locator = std::make_unique<Actor>();
-	locator->transform.localPosition = Engine::Vector2{ 0, -5 };
+	locator->transform.localPosition = Engine::Vector2{ 2, -3 };
 	AddChild(std::move(locator));
 
-	std::unique_ptr engine = std::make_unique<Actor>(Engine::Transform{}, scene->engine->Get<Engine::ResourceSystem>()->Get<Engine::Shape>("shape.txt"));
-	engine->transform.localPosition = Engine::Vector2{ 8, 0 };
-	engine->transform.localRotation = Engine::DegToRad(180);
+	std::unique_ptr engine = std::make_unique<Actor>(/*Engine::Transform{}, scene->engine->Get<Engine::ResourceSystem>()->Get<Engine::Shape>("PlayerShape.txt")*/);
+	engine->transform.localPosition = Engine::Vector2{ -2, 0 };
+	//engine->transform.localRotation = Engine::DegToRad(180);
 	AddChild(std::move(engine));
 }
 
@@ -57,33 +58,44 @@ void Player::Update(float dt)
 	if (fireTimer <= 0 && Core::Input::IsPressed(VK_SPACE))
 	{
 		fireTimer = fireRate;
+		
+		{
 
-		Engine::Transform t = children[0]->transform;
-		t.scale = 0.5f;
-
-		std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(t, scene->engine->Get<Engine::ResourceSystem>()->Get<Engine::Shape>("shape.txt"), 600);
-		projectile->tag = "Player";
-		scene->AddActor(std::move(projectile));
-		scene->engine->Get<Engine::AudioSystem>()->PlayAudio("PlayerShoot");
+			Engine::Transform t = children[0]->transform;
+			t.scale = 0.5f;
+			std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(t, scene->engine->Get<Engine::ResourceSystem>()->Get<Engine::Shape>("PlayerShape.txt"), 600);
+			projectile->tag = "Player";
+			scene->AddActor(std::move(projectile));
+			scene->engine->Get<Engine::AudioSystem>()->PlayAudio("PlayerShoot");
+		}
+		{
+			
+			Engine::Transform t = children[1]->transform;
+			t.scale = 0.5f;
+			std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(t, scene->engine->Get<Engine::ResourceSystem>()->Get<Engine::Shape>("PlayerShape.txt"), 600);
+			projectile->tag = "Player";
+			scene->AddActor(std::move(projectile));
+			scene->engine->Get<Engine::AudioSystem>()->PlayAudio("PlayerShoot");
+		}
 	}
 
 	std::vector<Engine::Color> colors = { Engine::Color::purple, Engine::Color::cyan, Engine::Color::blue };
-	scene->engine->Get<Engine::ParticleSystem>()->Create(children[2]->transform.position, 3, 2, colors, 75, children[0]->transform.rotation, Engine::DegToRad(30));
+	scene->engine->Get<Engine::ParticleSystem>()->Create(children[2]->transform.position, 3, 2, colors, 75, children[2]->transform.rotation + Engine::DegToRad(180), Engine::DegToRad(30));
 }
 
 void Player::OnCollision(Actor* actor)
 {
 	return;
 
-	if (dynamic_cast<Enemy*>(actor))
+	if (dynamic_cast<Enemy*>(actor) || dynamic_cast<Asteroid*>(actor) || (dynamic_cast<Projectile*>(actor) && actor->tag != "Player"))
 	{
 		destroy = true;
 		scene->engine->Get<Engine::ParticleSystem>()->Create(transform.position, 200, 1, Engine::Color::white, 100);
 		scene->engine->Get<Engine::AudioSystem>()->PlayAudio("PlayerExplosion");
 
 		Engine::Event event;
-		/*event.name = "PlayerDead";
+		event.name = "PlayerDead";
 		event.data = std::string("yes i'm dead!");
-		scene->engine->Get<Engine::EventSystem>()->Notify(event);*/
+		scene->engine->Get<Engine::EventSystem>()->Notify(event);
 	}
 }

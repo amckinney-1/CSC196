@@ -12,8 +12,9 @@ public:
 	void OnCollision(Actor* actor) override;
 
 private:
+	std::string tag{ "Player" };
 	float fireTimer{ 0 };
-	float fireRate{ 0.1f };
-	float speed{ 100 };
+	float fireRate{ 0.25f };
+	float speed{ 1000 };
 	Engine::Vector2 velocity;
 };

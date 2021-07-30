@@ -24,8 +24,6 @@ namespace Engine
 				float distance = dir.Length();
 				if (distance < actors[i]->GetRadius() + actors[j]->GetRadius())
 				{
-
-
 					actors[i]->OnCollision(actors[j].get());
 					actors[j]->OnCollision(actors[i].get());
 				}
